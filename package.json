@@ -2,17 +2,24 @@
   "name": "stocks",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=6 <7"
+  },
   "devDependencies": {
     "react-scripts": "0.6.1"
   },
   "dependencies": {
+    "express": "^4.14.0",
+    "mongoose": "^4.6.3",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
+    "socket.io": "^1.5.0",
     "socket.io-client": "^1.5.0",
     "victory": "^0.12.1"
   },
   "scripts": {
     "start": "react-scripts start",
+    "api": "nodemon server/server.js",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
