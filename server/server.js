@@ -4,6 +4,9 @@ const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 const mongoose = require('mongoose');
 
+// Declare native promise for mongoose in place of deprecated mpromise
+mongoose.Promise = global.Promise;
+
 const uristring = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/stocks';
 mongoose.connect(uristring, (err) => {
   if (err) {
