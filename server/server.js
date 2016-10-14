@@ -18,10 +18,17 @@ mongoose.connect(uristring, (err) => {
 
 require('./dummyData')(); // TODO: Remove function to load dummy data into db
 
+const History = require('./models/history');
+
 io.on('connection', (socket) => {
-  socket.emit('news', { hello: 'world' });
-  socket.on('my other event', (data) => {
-    console.log(data);
+  History.find().exec((err, history) => {
+    if (err) {
+      throw err;
+    }
+    socket.emit('history', history); // Initial sending of stock history from database
+    socket.on('my other event', (data) => { // testing dummy response from client
+      console.log(data);
+    });
   });
 });
 
