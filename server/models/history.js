@@ -5,7 +5,7 @@ const HistorySchema = new mongoose.Schema({
     type: String,
     uppercase: true
   },
-  history: [{
+  days: [{
     tradingDay: String,
     open: Number,
     high: Number,

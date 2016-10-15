@@ -7,7 +7,7 @@ const dummyData = () => {
     }
     const symbol1 = new History({
       symbol: 'ibm',
-      history:
+      days:
       [
         {
           symbol: 'IBM',
@@ -45,7 +45,7 @@ const dummyData = () => {
     });
     const symbol2 = new History({
       symbol: 'msft',
-      history: [
+      days: [
         {
           symbol: 'msft',
           timestamp: '2016-10-06T00:00:00-04:00',
