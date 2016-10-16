@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { VictoryChart, VictoryLine } from 'victory';
+import { VictoryChart, VictoryAxis, VictoryLine } from 'victory';
 import io from 'socket.io-client';
 
 const socket = io.connect('http://localhost:8080'); // TODO: Update localhost
+const colors = ['#1b9e77', '#d95f02', '#7570b3', '#e7298a', '#66a61e', '#e6ab02', '#a6761d'];
 
 class Chart extends Component {
   constructor(props) {
@@ -20,8 +21,22 @@ class Chart extends Component {
   render() {
     return (
       <VictoryChart>
-        {this.state.history.map(stock =>
-          <VictoryLine data={stock.days.map(day => ({ x: day.tradingDay, y: day.close }))} />
+        <VictoryAxis
+          offsetY={50}
+        />
+        <VictoryAxis
+          dependentAxis
+        />
+        {this.state.history.map((stock, index) =>
+          <VictoryLine
+            data={stock.days.map(day => ({ x: day.tradingDay, y: (day.close - stock.days[0].close) / stock.days[0].close }))}
+            style={{
+              data: {
+                stroke: colors[index],
+                strokeWidth: 3
+              }
+            }}
+          />
         )}
       </VictoryChart>
     );
