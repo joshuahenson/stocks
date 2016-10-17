@@ -29,6 +29,7 @@ class Chart extends Component {
         />
         {this.state.history.map((stock, index) =>
           <VictoryLine
+            key={index}
             data={stock.days.map(day => ({ x: day.tradingDay, y: (day.close - stock.days[0].close) / stock.days[0].close }))}
             style={{
               data: {
