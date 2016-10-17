@@ -3,6 +3,7 @@ require('./routes')(app);
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 const mongoose = require('mongoose');
+const historyController = require('./controllers/historyController');
 
 // Declare native promise for mongoose in place of deprecated mpromise
 mongoose.Promise = global.Promise;
@@ -18,22 +19,12 @@ mongoose.connect(uristring, (err) => {
 
 require('./dummyData')(); // TODO: Remove function to load dummy data into db
 
-const History = require('./models/history');
-
 let socketCounter = 0;
 
 io.on('connection', (socket) => {
   socketCounter += 1;
   console.log(`${socketCounter} socket connections active`);
-  History.find().exec((err, history) => {
-    if (err) {
-      throw err;
-    }
-    socket.emit('history', history); // Initial sending of stock history from database
-    socket.on('my other event', (data) => { // testing dummy response from client
-      console.log(data);
-    });
-  });
+  historyController.getHistory(socket);
   socket.on('disconnect', () => {
     socketCounter -= 1;
     console.log(`${socketCounter} socket connections active`);
