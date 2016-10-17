@@ -20,7 +20,11 @@ require('./dummyData')(); // TODO: Remove function to load dummy data into db
 
 const History = require('./models/history');
 
+let socketCounter = 0;
+
 io.on('connection', (socket) => {
+  socketCounter += 1;
+  console.log(`${socketCounter} socket connections active`);
   History.find().exec((err, history) => {
     if (err) {
       throw err;
@@ -29,6 +33,10 @@ io.on('connection', (socket) => {
     socket.on('my other event', (data) => { // testing dummy response from client
       console.log(data);
     });
+  });
+  socket.on('disconnect', () => {
+    socketCounter -= 1;
+    console.log(`${socketCounter} socket connections active`);
   });
 });
 
