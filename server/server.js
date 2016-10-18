@@ -1,4 +1,8 @@
-const app = require('express')();
+const express = require('express');
+const bodyParser = require('body-parser');
+
+const app = express();
+app.use(bodyParser.json());
 require('./routes')(app);
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
