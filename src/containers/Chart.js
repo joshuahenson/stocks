@@ -25,6 +25,7 @@ class Chart extends Component {
         <VictoryChart>
           <VictoryAxis
             offsetY={50}
+            fixLabelOverlap
           />
           <VictoryAxis
             dependentAxis
