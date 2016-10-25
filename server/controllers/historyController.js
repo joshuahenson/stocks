@@ -1,28 +1,22 @@
 const History = require('../models/history');
 const axios = require('axios');
 
-// helper function I plan on using to update existing symbols daily and get info for new symbols
 // TODO: fix startDate in URL
-const loadHistory = (symbol) => {
+const addSymbol = (symbol, socket) => {
   axios.get(`http://marketdata.websol.barchart.com/getHistory.json?key=${process.env.BARCHART_KEY}&symbol=${symbol}&type=daily&startDate=20161006&order=asc`)
     .then((res) => {
-      History.update(
+      History.findOneAndUpdate(
         { symbol: symbol.toUpperCase() },
         { $set: { days: res.data.results } },
-        { upsert: true },
-        (err) => {
+        { new: true, upsert: true },
+        (err, doc) => {
           if (err) {
             console.error(err);
           }
+          socket.emit('new symbol', doc);
         }
       );
     });
-};
-
-const addSymbol = (req, res) => {
-  const symbol = req.body.symbol;
-  loadHistory(symbol);
-  res.status(200).end();
 };
 
 const getHistory = (socket) => {

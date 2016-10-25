@@ -4,7 +4,6 @@ const bodyParser = require('body-parser');
 const app = express();
 app.use(bodyParser.json());
 require('dotenv').config();
-require('./routes')(app);
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 const mongoose = require('mongoose');
@@ -30,6 +29,7 @@ io.on('connection', (socket) => {
   socketCounter += 1;
   console.log(`${socketCounter} socket connections active`);
   historyController.getHistory(socket);
+  socket.on('client add symbol', data => historyController.addSymbol(data.symbol, socket));
   socket.on('disconnect', () => {
     socketCounter -= 1;
     console.log(`${socketCounter} socket connections active`);

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { VictoryChart, VictoryAxis, VictoryLine } from 'victory';
 import io from 'socket.io-client';
-import axios from 'axios';
 
 const socket = io.connect('http://localhost:3001'); // TODO: Update localhost
 const colors = ['#1b9e77', '#d95f02', '#7570b3', '#e7298a', '#66a61e', '#e6ab02', '#a6761d'];
@@ -17,6 +16,9 @@ class Chart extends Component {
     socket.on('history', (history) => {
       this.setState({ history });
       socket.emit('my other event', { my: 'data' }); // testing dummy response
+    });
+    socket.on('new symbol', (newSymbol) => {
+      this.setState({ history: [...this.state.history, newSymbol] });
     });
   }
   render() {
@@ -43,7 +45,7 @@ class Chart extends Component {
             />
           )}
         </VictoryChart>
-        <button onClick={() => axios.get('/testing').then(res => console.log(res))}>Test</button>
+        <button onClick={() => socket.emit('client add symbol', { symbol: 'msft' })}>Test</button>
       </div>
     );
   }
