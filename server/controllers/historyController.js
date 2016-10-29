@@ -1,9 +1,10 @@
 const History = require('../models/history');
 const axios = require('axios');
 
-// TODO: fix startDate in URL
 const addSymbol = (symbol, socket) => {
-  axios.get(`http://marketdata.websol.barchart.com/getHistory.json?key=${process.env.BARCHART_KEY}&symbol=${symbol}&type=daily&startDate=20161006&order=asc`)
+  const today = new Date();
+  const yearAgo = `${today.getFullYear() - 1}${today.getMonth() + 1}${today.getDate()}`;
+  axios.get(`http://marketdata.websol.barchart.com/getHistory.json?key=${process.env.BARCHART_KEY}&symbol=${symbol}&type=daily&startDate=${yearAgo}&order=asc`)
     .then((res) => {
       History.findOneAndUpdate(
         { symbol: symbol.toUpperCase() },
@@ -19,9 +20,10 @@ const addSymbol = (symbol, socket) => {
     });
 };
 
-// TODO: fix startDate in URL
 const updateIndividual = (symbol) => {
-  axios.get(`http://marketdata.websol.barchart.com/getHistory.json?key=${process.env.BARCHART_KEY}&symbol=${symbol}&type=daily&startDate=20161006&order=asc`)
+  const today = new Date();
+  const yearAgo = `${today.getFullYear() - 1}${today.getMonth() + 1}${today.getDate()}`;
+  axios.get(`http://marketdata.websol.barchart.com/getHistory.json?key=${process.env.BARCHART_KEY}&symbol=${symbol}&type=daily&startDate=${yearAgo}&order=asc`)
     .then((res) => {
       History.update(
         { symbol: symbol.toUpperCase() },
