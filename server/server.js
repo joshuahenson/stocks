@@ -27,7 +27,7 @@ mongoose.connect(uristring, (err) => {
 // May need to edit time if server has different timezone?
 // TODO: uncomment next line when I'm done constantly rebooting server
 // historyController.updateHistory();
-schedule.scheduleJob('* * 14 * 1-5', () => {
+schedule.scheduleJob('* 14 * * 1-5', () => {
   const time = new Date();
   console.log(`Stock histories updated at ${time.toString()}`);
   historyController.updateHistory();
