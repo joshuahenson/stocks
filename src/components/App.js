@@ -1,11 +1,11 @@
 import React from 'react';
-import Chart from '../containers/Chart';
+import StocksContainer from '../containers/StocksContainer';
 import './App.css';
 
 const App = () => {
   return (
     <div className="container">
-      <Chart />
+      <StocksContainer />
     </div>
   );
 };
