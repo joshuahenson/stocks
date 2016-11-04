@@ -1,9 +1,16 @@
 const History = require('../models/history');
 const axios = require('axios');
 
+const padNum = (num) => {
+  if (num.toString().length === 2) {
+    return num;
+  }
+  return `0${num}`;
+};
+
 const addSymbol = (symbol, socket) => {
   const today = new Date();
-  const yearAgo = `${today.getFullYear() - 1}${today.getMonth() + 1}${today.getDate()}`;
+  const yearAgo = `${today.getFullYear() - 1}${padNum(today.getMonth()) + 1}${padNum(today.getDate())}`;
   axios.get(`http://marketdata.websol.barchart.com/getHistory.json?key=${process.env.BARCHART_KEY}&symbol=${symbol}&type=daily&startDate=${yearAgo}&order=asc`)
     .then((res) => {
       History.findOneAndUpdate(
@@ -22,7 +29,7 @@ const addSymbol = (symbol, socket) => {
 
 const updateIndividual = (symbol) => {
   const today = new Date();
-  const yearAgo = `${today.getFullYear() - 1}${today.getMonth() + 1}${today.getDate()}`;
+  const yearAgo = `${today.getFullYear() - 1}${padNum(today.getMonth()) + 1}${padNum(today.getDate())}`;
   axios.get(`http://marketdata.websol.barchart.com/getHistory.json?key=${process.env.BARCHART_KEY}&symbol=${symbol}&type=daily&startDate=${yearAgo}&order=asc`)
     .then((res) => {
       History.update(
