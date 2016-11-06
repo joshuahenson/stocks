@@ -36,15 +36,25 @@ schedule.scheduleJob('* 14 * * 1-5', () => {
 require('./dummyData')(); // TODO: Remove function to load dummy data into db
 
 let socketCounter = 0;
+let timer;
 
 io.on('connection', (socket) => {
   socketCounter += 1;
   console.log(`${socketCounter} socket connections active`);
+  if (socketCounter === 1) {
+    console.log('start');
+    historyController.getRecent(socket);
+    timer = setInterval(() => historyController.getRecent(socket), 300000);
+  }
   historyController.getHistory(socket);
   socket.on('client add symbol', data => historyController.addSymbol(data.symbol, socket));
   socket.on('disconnect', () => {
     socketCounter -= 1;
     console.log(`${socketCounter} socket connections active`);
+    if (socketCounter === 0) {
+      console.log('Stopping timer');
+      clearInterval(timer);
+    }
   });
 });
 
