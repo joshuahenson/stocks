@@ -9,6 +9,7 @@ const padNum = (num) => {
 };
 
 const addSymbol = (symbol, socket) => {
+  // TODO: get recent quote for new symbol including updating with name
   const today = new Date();
   const yearAgo = `${today.getFullYear() - 1}${padNum(today.getMonth()) + 1}${padNum(today.getDate())}`;
   axios.get(`http://marketdata.websol.barchart.com/getHistory.json?key=${process.env.BARCHART_KEY}&symbol=${symbol}&type=daily&startDate=${yearAgo}&order=asc`)
@@ -67,4 +68,33 @@ const getHistory = (socket) => {
   });
 };
 
-module.exports = { getHistory, addSymbol, updateHistory };
+const getRecent = (socket) => {
+  History.find().exec((err, history) => {
+    if (err) {
+      throw err;
+    }
+    const symbols = history.map(stock => stock.symbol).join();
+    axios.get(`http://marketdata.websol.barchart.com/getQuote.json?key=${process.env.BARCHART_KEY}&symbols=${symbols}`)
+      .then(res => res.data.results.forEach((stock) => {
+        const recent = {
+          lastPrice: stock.lastPrice,
+          netChange: stock.netChange,
+          percentChange: `${stock.percentChange}%`,
+          tradeTimestamp: new Date(stock.tradeTimestamp)
+        };
+        History.update(
+          { symbol: stock.symbol },
+          { $set: recent },
+          (err) => {
+            if (err) {
+              console.error(err);
+            }
+          }
+        );
+        socket.emit('get recent', recent);
+      }))
+      .catch(err => console.error(err));
+  });
+};
+
+module.exports = { getHistory, addSymbol, updateHistory, getRecent };
