@@ -8,15 +8,25 @@ const padNum = (num) => {
   return `0${num}`;
 };
 
+// TODO: emit message on catch
+
 const addSymbol = (symbol, socket) => {
-  // TODO: get recent quote for new symbol including updating with name
   const today = new Date();
   const yearAgo = `${today.getFullYear() - 1}${padNum(today.getMonth()) + 1}${padNum(today.getDate())}`;
-  axios.get(`http://marketdata.websol.barchart.com/getHistory.json?key=${process.env.BARCHART_KEY}&symbol=${symbol}&type=daily&startDate=${yearAgo}&order=asc`)
-    .then((res) => {
+  const addHistory = () => axios.get(`http://marketdata.websol.barchart.com/getHistory.json?key=${process.env.BARCHART_KEY}&symbol=${symbol}&type=daily&startDate=${yearAgo}&order=asc`);
+  const addRecent = () => axios.get(`http://marketdata.websol.barchart.com/getQuote.json?key=${process.env.BARCHART_KEY}&symbols=${symbol}`);
+  axios.all([addHistory(), addRecent()])
+    .then(axios.spread((history, recent) => {
       History.findOneAndUpdate(
         { symbol: symbol.toUpperCase() },
-        { $set: { days: res.data.results } },
+        { $set: {
+          days: history.data.results,
+          name: recent.data.results[0].name,
+          lastPrice: recent.data.results[0].lastPrice,
+          netChange: recent.data.results[0].netChange,
+          percentChange: `${recent.data.results[0].percentChange}%`,
+          tradeTimestamp: new Date(recent.data.results[0].tradeTimestamp)
+        } },
         { new: true, upsert: true },
         (err, doc) => {
           if (err) {
@@ -25,7 +35,8 @@ const addSymbol = (symbol, socket) => {
           socket.emit('new symbol', doc);
         }
       );
-    });
+    }))
+    .catch(err => console.error(err));
 };
 
 const updateIndividual = (symbol) => {
