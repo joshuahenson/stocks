@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const HistorySchema = new mongoose.Schema({
   symbol: {
     type: String,
-    uppercase: true
+    uppercase: true,
+    unique: true
   },
   days: [{
     tradingDay: String,
@@ -13,10 +14,12 @@ const HistorySchema = new mongoose.Schema({
     close: Number
   }],
   name: String,
-  lastPrice: Number,
-  netChange: Number,
-  percentChange: String,
-  tradeTimestamp: Date
+  recent: {
+    lastPrice: Number,
+    netChange: Number,
+    percentChange: String,
+    tradeTimestamp: Date
+  }
 });
 
 module.exports = mongoose.model('History', HistorySchema);
