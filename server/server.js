@@ -44,10 +44,10 @@ io.on('connection', (socket) => {
   if (socketCounter === 1) {
     console.log('start');
     historyController.getRecent(socket);
-    timer = setInterval(() => historyController.getRecent(socket), 300000);
+    timer = setInterval(() => historyController.getRecent(io), 300000);
   }
   historyController.getHistory(socket);
-  socket.on('client add symbol', data => historyController.addSymbol(data.symbol, socket));
+  socket.on('client add symbol', data => historyController.addSymbol(data.symbol, io));
   socket.on('disconnect', () => {
     socketCounter -= 1;
     console.log(`${socketCounter} socket connections active`);
