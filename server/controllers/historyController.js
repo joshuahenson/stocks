@@ -22,10 +22,12 @@ const addSymbol = (symbol, io) => {
         { $set: {
           days: history.data.results,
           name: recent.data.results[0].name,
-          lastPrice: recent.data.results[0].lastPrice,
-          netChange: recent.data.results[0].netChange,
-          percentChange: `${recent.data.results[0].percentChange}%`,
-          tradeTimestamp: new Date(recent.data.results[0].tradeTimestamp)
+          recent: {
+            lastPrice: recent.data.results[0].lastPrice,
+            netChange: recent.data.results[0].netChange,
+            percentChange: `${recent.data.results[0].percentChange}%`,
+            tradeTimestamp: new Date(recent.data.results[0].tradeTimestamp)
+          }
         } },
         { new: true, upsert: true },
         (err, doc) => {
@@ -95,14 +97,14 @@ const getRecent = (io) => {
         };
         History.update(
           { symbol: stock.symbol },
-          { $set: recent },
+          { $set: { recent } },
           (err) => {
             if (err) {
               console.error(err);
             }
           }
         );
-        io.emit('get recent', recent);
+        io.emit('get recent', { symbol: stock.symbol, recent });
       }))
       .catch(err => console.error(err));
   });
