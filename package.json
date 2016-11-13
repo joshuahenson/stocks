@@ -26,7 +26,7 @@
     "react-dom": "^15.3.2",
     "socket.io": "^1.5.0",
     "socket.io-client": "^1.5.0",
-    "victory": "^0.12.1"
+    "victory": "^0.13.7"
   },
   "scripts": {
     "start": "react-scripts start",
