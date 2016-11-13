@@ -1,0 +1,15 @@
+.col {
+  flex: 1;
+  min-width: 250px;
+  margin: 5px;
+  padding: 3px;
+}
+
+.recent {
+  width: 250px;
+  margin: 0 auto;
+}
+
+ul {
+  list-style-type: none;
+}
