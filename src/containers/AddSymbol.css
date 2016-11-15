@@ -1,0 +1,19 @@
+.add-symbol {
+  margin: 5px;
+}
+
+.add-symbol input {
+  width: calc(100% - 75px);
+  height: 25px;
+  border: 1px solid #3d3d3d;
+  padding-left: 5px;
+}
+
+.add-symbol button {
+  width: 75px;
+  background-color: #3d3d3d;
+  color: white;
+  height: 25px;
+  border: none;
+  cursor: pointer;
+}

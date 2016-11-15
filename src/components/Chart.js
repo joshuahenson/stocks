@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { VictoryChart, VictoryAxis, VictoryLine } from 'victory';
 
-const Chart = ({ history, socket, colors }) => {
+const Chart = ({ history, colors }) => {
   return (
     <div>
       <VictoryChart>
@@ -25,14 +25,12 @@ const Chart = ({ history, socket, colors }) => {
           />
         )}
       </VictoryChart>
-      <button onClick={() => socket.emit('client add symbol', { symbol: 'msft' })}>Test</button>
     </div>
   );
 };
 
 Chart.propTypes = {
   colors: PropTypes.array,
-  socket: PropTypes.object,
   history: PropTypes.array
 };
 

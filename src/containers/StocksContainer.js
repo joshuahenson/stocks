@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import io from 'socket.io-client';
 import Chart from '../components/Chart';
 import RecentQuote from '../components/RecentQuote';
+import AddSymbol from './AddSymbol';
 import './StocksContainer.css';
 
 const socket = io.connect('http://localhost:3001'); // TODO: Update localhost
@@ -26,7 +27,8 @@ class StocksContainer extends Component {
   render() {
     return (
       <div>
-        <Chart colors={colors} socket={socket} history={this.state.history} />
+        <Chart colors={colors} history={this.state.history} />
+        <AddSymbol socket={socket} />
         <div className="flex-grid">
           {this.state.history.map((stock, index) =>
             <RecentQuote symbol={stock.symbol} name={stock.name} recent={stock.recent} color={colors[index]} key={index} />)
