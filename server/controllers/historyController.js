@@ -41,6 +41,15 @@ const addSymbol = (symbol, io) => {
     .catch(err => console.error(err));
 };
 
+const deleteSymbol = (symbol, io) => {
+  io.emit('delete symbol', { symbol });
+  History.find({ symbol }).remove().exec((err) => {
+    if (err) {
+      console.error(err);
+    }
+  });
+};
+
 const updateIndividual = (symbol) => {
   const today = new Date();
   const yearAgo = `${today.getFullYear() - 1}${padNum(today.getMonth()) + 1}${padNum(today.getDate())}`;
@@ -110,4 +119,4 @@ const getRecent = (io) => {
   });
 };
 
-module.exports = { getHistory, addSymbol, updateHistory, getRecent };
+module.exports = { getHistory, addSymbol, deleteSymbol, updateHistory, getRecent };

@@ -43,17 +43,20 @@ io.on('connection', (socket) => {
   console.log(`${socketCounter} socket connections active`);
   if (socketCounter === 1) {
     console.log('start');
-    historyController.getRecent(socket);
-    timer = setInterval(() => historyController.getRecent(io), 300000);
+    // TODO: uncomment next lines when I'm done constantly rebooting server
+    // historyController.getRecent(io);
+    // timer = setInterval(() => historyController.getRecent(io), 300000);
   }
   historyController.getHistory(socket);
   socket.on('client add symbol', data => historyController.addSymbol(data.symbol, io));
+  socket.on('client delete symbol', data => historyController.deleteSymbol(data.symbol, io));
   socket.on('disconnect', () => {
     socketCounter -= 1;
     console.log(`${socketCounter} socket connections active`);
     if (socketCounter === 0) {
       console.log('Stopping timer');
-      clearInterval(timer);
+      // TODO: uncomment next line when I'm done constantly rebooting server
+      // clearInterval(timer);
     }
   });
 });

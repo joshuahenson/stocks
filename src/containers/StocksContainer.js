@@ -23,6 +23,9 @@ class StocksContainer extends Component {
     socket.on('new symbol', (newSymbol) => {
       this.setState({ history: [...this.state.history, newSymbol] });
     });
+    socket.on('delete symbol', (delSymbol) => {
+      this.setState({ history: this.state.history.filter(stock => stock.symbol !== delSymbol.symbol) });
+    });
   }
   render() {
     return (
@@ -31,8 +34,11 @@ class StocksContainer extends Component {
         <AddSymbol socket={socket} />
         <div className="flex-grid">
           {this.state.history.map((stock, index) =>
-            <RecentQuote symbol={stock.symbol} name={stock.name} recent={stock.recent} color={colors[index]} key={index} />)
-          }
+            <RecentQuote
+              symbol={stock.symbol} name={stock.name} recent={stock.recent}
+              color={colors[index]} key={index} socket={socket}
+            />
+          )}
         </div>
       </div>
     );

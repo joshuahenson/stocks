@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import './RecentQuote.css';
 
-const RecentQuote = ({ symbol, name, recent, color }) => {
+const RecentQuote = ({ symbol, name, recent, color, socket }) => {
   return (
     <div
       className="col"
@@ -10,10 +10,11 @@ const RecentQuote = ({ symbol, name, recent, color }) => {
         color
       }}
     >
+      <button className="close" onClick={() => socket.emit('client delete symbol', { symbol })} />
       <div className="recent">
         <h4>{name} ({symbol})</h4>
         <ul>
-          <li>Last: ${recent.lastPrice}</li>
+          <li>Price: ${recent.lastPrice}</li>
           <li>Change: {recent.netChange} ({recent.percentChange})</li>
         </ul>
       </div>
@@ -25,7 +26,8 @@ RecentQuote.propTypes = {
   symbol: PropTypes.string,
   name: PropTypes.string,
   recent: PropTypes.object,
-  color: PropTypes.string
+  color: PropTypes.string,
+  socket: PropTypes.object
 };
 
 export default RecentQuote;
