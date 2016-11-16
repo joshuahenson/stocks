@@ -10,7 +10,7 @@ const padNum = (num) => {
 
 // TODO: emit message on catch
 
-const addSymbol = (symbol, io) => {
+const addSymbol = (symbol, io, socket) => {
   const today = new Date();
   const yearAgo = `${today.getFullYear() - 1}${padNum(today.getMonth()) + 1}${padNum(today.getDate())}`;
   const addHistory = () => axios.get(`http://marketdata.websol.barchart.com/getHistory.json?key=${process.env.BARCHART_KEY}&symbol=${symbol}&type=daily&startDate=${yearAgo}&order=asc`);
@@ -35,6 +35,7 @@ const addSymbol = (symbol, io) => {
             console.error(err);
           }
           io.emit('new symbol', doc);
+          socket.emit('added symbol');
         }
       );
     }))

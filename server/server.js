@@ -48,7 +48,7 @@ io.on('connection', (socket) => {
     // timer = setInterval(() => historyController.getRecent(io), 300000);
   }
   historyController.getHistory(socket);
-  socket.on('client add symbol', data => historyController.addSymbol(data.symbol, io));
+  socket.on('client add symbol', data => historyController.addSymbol(data.symbol, io, socket));
   socket.on('client delete symbol', data => historyController.deleteSymbol(data.symbol, io));
   socket.on('disconnect', () => {
     socketCounter -= 1;
