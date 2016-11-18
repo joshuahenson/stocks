@@ -8,8 +8,6 @@ const padNum = (num) => {
   return `0${num}`;
 };
 
-// TODO: emit message on catch
-
 const addSymbol = (symbol, io, socket) => {
   const today = new Date();
   const yearAgo = `${today.getFullYear() - 1}${padNum(today.getMonth()) + 1}${padNum(today.getDate())}`;
@@ -17,29 +15,38 @@ const addSymbol = (symbol, io, socket) => {
   const addRecent = () => axios.get(`http://marketdata.websol.barchart.com/getQuote.json?key=${process.env.BARCHART_KEY}&symbols=${symbol}`);
   axios.all([addHistory(), addRecent()])
     .then(axios.spread((history, recent) => {
-      History.findOneAndUpdate(
-        { symbol: symbol.toUpperCase() },
-        { $set: {
-          days: history.data.results,
-          name: recent.data.results[0].name,
-          recent: {
-            lastPrice: recent.data.results[0].lastPrice,
-            netChange: recent.data.results[0].netChange,
-            percentChange: `${recent.data.results[0].percentChange}%`,
-            tradeTimestamp: new Date(recent.data.results[0].tradeTimestamp)
+      console.log(history.data.status.code);
+      if (history.data.status.code === 204) {
+        console.log('status 204');
+        socket.emit('error message', { message: 'Please enter a valid ticker symbol.' });
+      } else {
+        History.findOneAndUpdate(
+          { symbol: symbol.toUpperCase() },
+          { $set: {
+            days: history.data.results,
+            name: recent.data.results[0].name,
+            recent: {
+              lastPrice: recent.data.results[0].lastPrice,
+              netChange: recent.data.results[0].netChange,
+              percentChange: `${recent.data.results[0].percentChange}%`,
+              tradeTimestamp: new Date(recent.data.results[0].tradeTimestamp)
+            }
+          } },
+          { new: true, upsert: true },
+          (err, doc) => {
+            if (err) {
+              console.error(err);
+            }
+            io.emit('new symbol', doc);
+            socket.emit('added symbol');
           }
-        } },
-        { new: true, upsert: true },
-        (err, doc) => {
-          if (err) {
-            console.error(err);
-          }
-          io.emit('new symbol', doc);
-          socket.emit('added symbol');
-        }
-      );
+        );
+      }
     }))
-    .catch(err => console.error(err));
+    .catch((err) => {
+      console.error(err);
+      socket.emit('error message', { message: 'Server error. Please try again.' });
+    });
 };
 
 const deleteSymbol = (symbol, io) => {

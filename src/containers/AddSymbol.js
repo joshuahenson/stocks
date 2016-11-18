@@ -15,6 +15,9 @@ class AddSymbol extends Component {
   componentDidMount() {
     const { socket } = this.props;
     socket.on('added symbol', () => this.setState({ adding: false }));
+    socket.on('error message', (error) => {
+      this.setState({ error: error.message, adding: false });
+    });
   }
   handleChange(event) {
     this.setState({ value: event.target.value });
