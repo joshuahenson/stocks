@@ -15,10 +15,9 @@
 }
 
 .close:hover {
-  background-color: red;
-  color: white;
-  border: 1px solid red;
+  color: red;
   cursor: pointer;
+  font-weight: bold;
 }
 
 .close:after {
