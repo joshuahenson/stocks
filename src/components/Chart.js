@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import { VictoryChart, VictoryAxis, VictoryLine } from 'victory';
 
+// TODO: Selector to select different timeframes other than just one year?
 const Chart = ({ history, colors }) => {
   return (
     <div>
@@ -10,6 +11,7 @@ const Chart = ({ history, colors }) => {
           fixLabelOverlap
         />
         <VictoryAxis
+          tickFormat={x => (`${Math.floor(x * 100)}%`)}
           dependentAxis
         />
         {history.map((stock, index) =>
@@ -19,7 +21,7 @@ const Chart = ({ history, colors }) => {
             style={{
               data: {
                 stroke: colors[index],
-                strokeWidth: 3
+                strokeWidth: 2
               }
             }}
           />
