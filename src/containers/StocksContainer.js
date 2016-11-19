@@ -38,6 +38,7 @@ class StocksContainer extends Component {
             <RecentQuote
               symbol={stock.symbol} name={stock.name} recent={stock.recent}
               color={colors[index]} key={index} socket={socket}
+              change={[stock.days[0].close, stock.days[stock.days.length - 1].close]}
             />
           )}
         </div>
