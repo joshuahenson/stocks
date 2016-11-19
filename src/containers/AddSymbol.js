@@ -30,6 +30,8 @@ class AddSymbol extends Component {
       this.setState({ error: 'TICKER SYMBOL REQUIRED' });
     } else if (symbols.indexOf(value.toUpperCase()) !== -1) {
       this.setState({ error: 'THAT SYMBOL HAS ALREADY BEEN ADDED' });
+    } else if (symbols.length > 5) {
+      this.setState({ error: 'PLEASE REMOVE ANOTHER STOCK FIRST' });
     } else {
       socket.emit('client add symbol', { symbol: value });
       this.setState({ value: '', adding: true, error: '' });
