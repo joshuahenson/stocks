@@ -15,9 +15,7 @@ const addSymbol = (symbol, io, socket) => {
   const addRecent = () => axios.get(`http://marketdata.websol.barchart.com/getQuote.json?key=${process.env.BARCHART_KEY}&symbols=${symbol}`);
   axios.all([addHistory(), addRecent()])
     .then(axios.spread((history, recent) => {
-      console.log(history.data.status.code);
       if (history.data.status.code === 204) {
-        console.log('status 204');
         socket.emit('error message', { message: 'Please enter a valid ticker symbol.' });
       } else {
         History.findOneAndUpdate(
