@@ -23,11 +23,13 @@ class AddSymbol extends Component {
     this.setState({ value: event.target.value });
   }
   handleSubmit(event) {
-    const { socket } = this.props;
+    const { socket, symbols } = this.props;
     const { value } = this.state;
     event.preventDefault();
     if (value === '') {
       this.setState({ error: 'TICKER SYMBOL REQUIRED' });
+    } else if (symbols.indexOf(value.toUpperCase()) !== -1) {
+      this.setState({ error: 'THAT SYMBOL HAS ALREADY BEEN ADDED' });
     } else {
       socket.emit('client add symbol', { symbol: value });
       this.setState({ value: '', adding: true, error: '' });
@@ -47,7 +49,8 @@ class AddSymbol extends Component {
 }
 
 AddSymbol.propTypes = {
-  socket: PropTypes.object
+  socket: PropTypes.object,
+  symbols: PropTypes.array
 };
 
 export default AddSymbol;

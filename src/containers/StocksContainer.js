@@ -28,12 +28,13 @@ class StocksContainer extends Component {
     });
   }
   render() {
+    const { history } = this.state;
     return (
       <div>
-        <Chart colors={colors} history={this.state.history} />
-        <AddSymbol socket={socket} />
+        <Chart colors={colors} history={history} />
+        <AddSymbol socket={socket} symbols={history.map(stock => stock.symbol)} />
         <div className="flex-grid">
-          {this.state.history.map((stock, index) =>
+          {history.map((stock, index) =>
             <RecentQuote
               symbol={stock.symbol} name={stock.name} recent={stock.recent}
               color={colors[index]} key={index} socket={socket}
