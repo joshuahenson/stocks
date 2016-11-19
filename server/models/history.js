@@ -17,8 +17,7 @@ const HistorySchema = new mongoose.Schema({
   recent: {
     lastPrice: Number,
     netChange: Number,
-    percentChange: String,
-    tradeTimestamp: Date
+    percentChange: String
   }
 });
 

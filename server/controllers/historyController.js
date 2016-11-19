@@ -26,8 +26,7 @@ const addSymbol = (symbol, io, socket) => {
             recent: {
               lastPrice: recent.data.results[0].lastPrice,
               netChange: recent.data.results[0].netChange,
-              percentChange: `${recent.data.results[0].percentChange}%`,
-              tradeTimestamp: new Date(recent.data.results[0].tradeTimestamp)
+              percentChange: `${recent.data.results[0].percentChange}%`
             }
           } },
           { new: true, upsert: true },
@@ -90,9 +89,6 @@ const getHistory = (socket) => {
       throw err;
     }
     socket.emit('history', history); // Initial sending of stock history from database
-    socket.on('my other event', (data) => { // testing dummy response from client
-      console.log(data);
-    });
   });
 };
 
@@ -107,8 +103,7 @@ const getRecent = (io) => {
         const recent = {
           lastPrice: stock.lastPrice,
           netChange: stock.netChange,
-          percentChange: `${stock.percentChange}%`,
-          tradeTimestamp: new Date(stock.tradeTimestamp)
+          percentChange: `${stock.percentChange}%`
         };
         History.update(
           { symbol: stock.symbol },

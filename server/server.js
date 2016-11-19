@@ -25,15 +25,13 @@ mongoose.connect(uristring, (err) => {
 // Ensure that stock prices are up to date when server is rebooted
 // and updated at end of the day when api is updated
 // May need to edit time if server has different timezone?
-// TODO: uncomment next line when I'm done constantly rebooting server
-// historyController.updateHistory();
+// I'm not sure how well this will work when server sleeps such as heroku free tier
+historyController.updateHistory();
 schedule.scheduleJob('* 14 * * 1-5', () => {
   const time = new Date();
   console.log(`Stock histories updated at ${time.toString()}`);
   historyController.updateHistory();
 });
-
-require('./dummyData')(); // TODO: Remove function to load dummy data into db
 
 let socketCounter = 0;
 let timer;
@@ -42,10 +40,8 @@ io.on('connection', (socket) => {
   socketCounter += 1;
   console.log(`${socketCounter} socket connections active`);
   if (socketCounter === 1) {
-    console.log('start');
-    // TODO: uncomment next lines when I'm done constantly rebooting server
-    // historyController.getRecent(io);
-    // timer = setInterval(() => historyController.getRecent(io), 300000);
+    historyController.getRecent(io);
+    timer = setInterval(() => historyController.getRecent(io), 300000);
   }
   historyController.getHistory(socket);
   socket.on('client add symbol', data => historyController.addSymbol(data.symbol, io, socket));
@@ -54,9 +50,7 @@ io.on('connection', (socket) => {
     socketCounter -= 1;
     console.log(`${socketCounter} socket connections active`);
     if (socketCounter === 0) {
-      console.log('Stopping timer');
-      // TODO: uncomment next line when I'm done constantly rebooting server
-      // clearInterval(timer);
+      clearInterval(timer);
     }
   });
 });

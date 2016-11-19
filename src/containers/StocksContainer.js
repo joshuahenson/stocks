@@ -18,7 +18,6 @@ class StocksContainer extends Component {
   componentDidMount() {
     socket.on('history', (history) => {
       this.setState({ history });
-      socket.emit('my other event', { my: 'data' }); // testing dummy response
     });
     socket.on('new symbol', (newSymbol) => {
       this.setState({ history: [...this.state.history, newSymbol] });
