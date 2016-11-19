@@ -1,0 +1,37 @@
+.info-icon {
+  text-align: center;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background-color: black;
+  color: white;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  font-size: 17px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  font-family: cursive;
+}
+
+.info-icon:hover {
+  background-color: white;
+  color: black;
+  border: 1px solid black;
+}
+
+.modal{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(255,255,255,0.9);
+  padding:15px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.5);
+  transition: opacity 0.5s, visibility 0.5s;
+}
+
+.modal li {
+  padding-bottom: 5px;
+}
