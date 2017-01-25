@@ -10,7 +10,7 @@ const padNum = (num) => {
 
 const addSymbol = (symbol, io, socket) => {
   const today = new Date();
-  const yearAgo = `${today.getFullYear() - 1}${padNum(today.getMonth()) + 1}${padNum(today.getDate())}`;
+  const yearAgo = `${today.getFullYear() - 1}${padNum(today.getMonth() + 1)}${padNum(today.getDate())}`;
   const addHistory = () => axios.get(`http://marketdata.websol.barchart.com/getHistory.json?key=${process.env.BARCHART_KEY}&symbol=${symbol}&type=daily&startDate=${yearAgo}&order=asc`);
   const addRecent = () => axios.get(`http://marketdata.websol.barchart.com/getQuote.json?key=${process.env.BARCHART_KEY}&symbols=${symbol}`);
   axios.all([addHistory(), addRecent()])
@@ -57,7 +57,7 @@ const deleteSymbol = (symbol, io) => {
 
 const updateIndividual = (symbol) => {
   const today = new Date();
-  const yearAgo = `${today.getFullYear() - 1}${padNum(today.getMonth()) + 1}${padNum(today.getDate())}`;
+  const yearAgo = `${today.getFullYear() - 1}${padNum(today.getMonth() + 1)}${padNum(today.getDate())}`;
   axios.get(`http://marketdata.websol.barchart.com/getHistory.json?key=${process.env.BARCHART_KEY}&symbol=${symbol}&type=daily&startDate=${yearAgo}&order=asc`)
     .then((res) => {
       History.update(
